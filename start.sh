@@ -7,8 +7,13 @@ else
   varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY}
 fi
 sleep 1
-until varnishlog; do
+until (varnishtop -1); do
+  echo "Waiting for varnish"
   sleep 5
-  echo "Retrying varnishlog"
 done
+if [[ -z $DEBUG ]]; then
+  varnishncsa
+else
+  varnishlog
+fi
 
