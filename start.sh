@@ -7,4 +7,8 @@ else
   varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY}
 fi
 sleep 1
-varnishlog
+until varnishlog; do
+  sleep 5
+  echo "Retrying varnishlog"
+done
+
