@@ -12,6 +12,8 @@ RUN ./configure --with-rst2man=: || cat config.log && \
     make check && \
     make install
 
+FROM hairyhenderson/gomplate as gomplate
+
 FROM alpine:3.6
 MAINTAINER  Frode Egeland <egeland@gmail.com>
 ENV REFRESHED_AT 2017-07-04
@@ -25,6 +27,7 @@ RUN apk update && \
     apk add varnish
 
 COPY --from=builder /usr/lib/varnish/vmods/libvmod_querystring.so /usr/lib/varnish/vmods/libvmod_querystring.so
+COPY --from=gomplate /gomplate /usr/local/bin/gomplate
 
 ADD start.sh /start.sh
 CMD ["/start.sh"]
