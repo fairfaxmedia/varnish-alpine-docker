@@ -19,6 +19,10 @@ until (varnishtop -1); do
   sleep 5
 done
 
+if [[ ! -z $VARNISH_DNS_REFRESH ]]; then
+  ./dnscheck.sh &
+fi
+
 if [[ -z $DEBUG ]]; then
   varnishncsa
 else

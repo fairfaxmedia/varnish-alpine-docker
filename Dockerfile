@@ -22,12 +22,11 @@ ENV VARNISH_MEMORY 100M
 ENV VARNISH_BACKEND_PORT 80
 EXPOSE 80
 
-RUN apk update && \
-    apk upgrade && \
-    apk add varnish
+RUN  apk --no-cache add varnish bind-tools
 
 COPY --from=builder /usr/lib/varnish/vmods/libvmod_querystring.so /usr/lib/varnish/vmods/libvmod_querystring.so
 COPY --from=gomplate /gomplate /usr/local/bin/gomplate
 
 ADD start.sh /start.sh
+ADD dnscheck.sh /dnscheck.sh
 CMD ["/start.sh"]
