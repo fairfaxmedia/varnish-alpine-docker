@@ -27,6 +27,5 @@ RUN  apk --no-cache add varnish bind-tools
 COPY --from=builder /usr/lib/varnish/vmods/libvmod_querystring.so /usr/lib/varnish/vmods/libvmod_querystring.so
 COPY --from=gomplate /gomplate /usr/local/bin/gomplate
 
-ADD start.sh /start.sh
-ADD dnscheck.sh /dnscheck.sh
+ADD *.sh /
 CMD ["/start.sh"]
