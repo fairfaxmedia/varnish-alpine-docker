@@ -26,10 +26,11 @@ if [[ ! -z $VARNISH_DNS_REFRESH ]]; then
   ./dnscheck.sh &
 fi
 
+/usr/local/bin/prometheus_varnish_exporter -no-exit &
+
 if [[ -z $DEBUG ]]; then
   varnishncsa
 else
   echo "Debug logging enabled"
   varnishlog
 fi
-
