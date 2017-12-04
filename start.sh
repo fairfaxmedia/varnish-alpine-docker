@@ -29,7 +29,8 @@ fi
 /usr/local/bin/prometheus_varnish_exporter -no-exit &
 
 if [[ -z $DEBUG ]]; then
-  varnishncsa
+  : ${VARNISH_NCSA_FORMAT:='%h %l %u %t "%r" %s %b "%{Referer}i" "%{User-agent}i"'}
+  varnishncsa -F "${VARNISH_NCSA_FORMAT}"
 else
   echo "Debug logging enabled"
   varnishlog
