@@ -7,12 +7,15 @@ A very small Varnish docker image based on Alpine Linux, with
 
 Based upon [thiagofigueiro/varnish-alpine-docker](https://github.com/thiagofigueiro/varnish-alpine-docker)
 
+Includes a metrics endpoint suitable for use with Promemetheus, using <https://github.com/jonnenauha/prometheus_varnish_exporter>
+
 ## Environment variables
 *   `VARNISH_MEMORY` - how much memory Varnish can use for caching. Defaults to 100M.
 *   `VARNISH_GOMPLATE_FILE` - a template file to use, filled in with your environment variables. No default set. Needs `VARNISH_CONFIG_FILE` set.
 *   `VARNISH_CONFIG_FILE` - path to a VCL file. Use this _or_ the two options below:
 *   `VARNISH_BACKEND_ADDRESS` - host/ip of your backend.  Defaults to 192.168.1.65.
 *   `VARNISH_BACKEND_PORT` - TCP port of your backend.  Defaults to 80.
+
 
 ## Quick start
 
