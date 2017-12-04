@@ -15,7 +15,7 @@ Includes a metrics endpoint suitable for use with Promemetheus, using <https://g
 *   `VARNISH_CONFIG_FILE` - path to a VCL file. Use this _or_ the two options below:
 *   `VARNISH_BACKEND_ADDRESS` - host/ip of your backend.  Defaults to 192.168.1.65.
 *   `VARNISH_BACKEND_PORT` - TCP port of your backend.  Defaults to 80.
-
+*   `VARNISH_SKIP_METRICS` - Skip exposing a metrics endpoint.
 
 ## Quick start
 
