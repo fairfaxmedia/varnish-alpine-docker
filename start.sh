@@ -26,7 +26,8 @@ if [[ ! -z $VARNISH_DNS_REFRESH ]]; then
   ./dnscheck.sh &
 fi
 
-if [[ ! -z $VARNISH_SKIP_METRICS ]]; then
+: ${VARNISH_SKIP_METRICS:=false}
+if [[ $VARNISH_SKIP_METRICS != "true" ]]; then
   /usr/local/bin/prometheus_varnish_exporter -no-exit &
 fi
 
