@@ -1,3 +1,8 @@
+### 5.1.0
+
+* Update to `dnscheck.sh` script to manage any number of backends, not just the one set
+in environment variable in the default configuration.
+
 ### 5.0.0
 
 * Re-tag of `3.6-qs-gotpl-2` for the semver versioning scheme.
