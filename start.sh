@@ -17,8 +17,8 @@ else
 fi
 sleep 1
 
-until (varnishtop -1); do
-  echo "Waiting for varnish to start"
+until (varnishtop -1 >/dev/null); do
+  echo "start.sh: Waiting for varnish to start"
   sleep 5
 done
 

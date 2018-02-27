@@ -1,6 +1,9 @@
 #!/bin/sh
 
-sleep 30  # Wait for varnish to start
+until (varnishtop -1 >/dev/null) ; do
+  echo "dnscheck.sh: Waiting for varnish to start"
+  sleep 1
+done
 
 get_backends()
 {
@@ -9,12 +12,12 @@ get_backends()
   for backend in ${BACKEND_LIST}; do
 
     if [[ $(getent ahostsv4 ${backend} | awk '{print $1}' |head -n 1) = $backend ]] 2>/dev/null ; then
-      echo "WARNING: Backend appears to be an IP address, no need to watch its dns"
+      echo "dnscheck.sh: WARNING: Backend appears to be an IP address, no need to watch its dns"
       continue
     fi
 
     if ! getent hosts ${backend} >/dev/null; then
-      echo "ERROR: ${backend} is not a valid address"
+      echo "dnscheck.sh: ERROR: ${backend} is not a valid address"
       exit 1
     fi
 
@@ -37,12 +40,14 @@ while true; do
     # Compare old vs new
     cmp -s "/tmp/lookup_${backend}.new" "/tmp/lookup_${backend}.curr"
     if [[ 1 -eq $? ]]; then
-
-      # DNS has changed!
+      if [[ -s "/tmp/lookup_${backend}.curr" ]]; then
+        # DNS has changed!
+        echo "dnscheck.sh: DNS changed for ${backend}"
+        reload_needed=1
+      else
+        echo "dnscheck.sh: First check for ${backend} - skipping reload"
+      fi
       mv "/tmp/lookup_${backend}.new" "/tmp/lookup_${backend}.curr"
-
-      reload_needed=1
-
     fi
   done
   if [[ $reload_needed -ne 0 ]]; then
