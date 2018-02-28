@@ -1,33 +1,57 @@
 #!/bin/sh
 
-if [[ $(getent ahostsv4 ${VARNISH_BACKEND_ADDRESS} | awk '{print $1}' |head -n 1) = $VARNISH_BACKEND_ADDRESS ]] 2>/dev/null ; then
-  echo "WARNING: Backend appears to be an IP address, no need to refresh dns"
-  exit 0
-fi
+until (varnishtop -1 >/dev/null) ; do
+  echo "dnscheck.sh: Waiting for varnish to start"
+  sleep 1
+done
 
-if ! getent hosts ${VARNISH_BACKEND_ADDRESS} >/dev/null; then
-  echo "ERROR: ${VARNISH_BACKEND_ADDRESS} is not a valid address"
-  exit 1
-fi
+get_backends()
+{
+  BACKEND_LIST=$(varnishadm vcl.show $(varnishadm vcl.list | grep active | awk '{print $4}') | grep '.host' | cut -d '"' -f 2)
+  > /tmp/backend.list
+  for backend in ${BACKEND_LIST}; do
 
-touch /tmp/lookup.curr
+    if [[ $(getent ahostsv4 ${backend} | awk '{print $1}' |head -n 1) = $backend ]] 2>/dev/null ; then
+      echo "dnscheck.sh: WARNING: Backend appears to be an IP address, no need to watch its dns"
+      continue
+    fi
+
+    if ! getent hosts ${backend} >/dev/null; then
+      echo "dnscheck.sh: ERROR: ${backend} is not a valid address"
+      exit 1
+    fi
+
+    echo $backend >> /tmp/backend.list
+
+    touch "/tmp/lookup_${backend}.curr"
+  done
+}
 
 while true; do
 
+  get_backends
   sleep ${VARNISH_DNS_TTL:-17}
+  reload_needed=0
 
   # Check DNS
-  getent ahostsv4 "${VARNISH_BACKEND_ADDRESS}" |awk '{print $1}' | head -n 1 > /tmp/lookup.new
+  for backend in $(cat /tmp/backend.list); do
+    getent ahostsv4 "${backend}" |awk '{print $1}' | head -n 1 > "/tmp/lookup_${backend}.new"
 
-  # Compare old vs new
-  cmp -s /tmp/lookup.new /tmp/lookup.curr
-  if [[ 1 -eq $? ]]; then
-
-    # DNS has changed!
-    mv /tmp/lookup.new /tmp/lookup.curr
+    # Compare old vs new
+    cmp -s "/tmp/lookup_${backend}.new" "/tmp/lookup_${backend}.curr"
+    if [[ 1 -eq $? ]]; then
+      if [[ -s "/tmp/lookup_${backend}.curr" ]]; then
+        # DNS has changed!
+        echo "dnscheck.sh: DNS changed for ${backend}"
+        reload_needed=1
+      else
+        echo "dnscheck.sh: First check for ${backend} - skipping reload"
+      fi
+      mv "/tmp/lookup_${backend}.new" "/tmp/lookup_${backend}.curr"
+    fi
+  done
+  if [[ $reload_needed -ne 0 ]]; then
     ./reload_varnish.sh
-
   fi
 
 done
-
