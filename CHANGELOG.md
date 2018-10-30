@@ -1,3 +1,8 @@
+### 5.1.1
+
+* Bugfix: `reload_varnish.sh` was using a wrong value to compare configs.
+
+
 ### 5.1.0
 
 * Update to `dnscheck.sh` script to manage any number of backends, not just the one set
