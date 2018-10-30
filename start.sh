@@ -22,14 +22,17 @@ until (varnishtop -1 >/dev/null); do
   sleep 5
 done
 
-if [[ ! -z $VARNISH_DNS_REFRESH ]]; then
-  ./dnscheck.sh &
-fi
+# moved to s6
+#if [[ ! -z $VARNISH_DNS_REFRESH ]]; then
+#  ./dnscheck.sh &
+#fi
 
-: ${VARNISH_SKIP_METRICS:=false}
-if [[ $VARNISH_SKIP_METRICS != "true" ]]; then
-  /usr/local/bin/prometheus_varnish_exporter -no-exit &
-fi
+# prometheus has ben moved into s6
+#
+#: ${VARNISH_SKIP_METRICS:=false}
+#if [[ $VARNISH_SKIP_METRICS != "true" ]]; then
+#  /usr/local/bin/prometheus_varnish_exporter -no-exit &
+#fi
 
 if [[ -z $DEBUG ]]; then
   : ${VARNISH_NCSA_FORMAT:='%h %l %u %t "%r" %s %b "%{Referer}i" "%{User-agent}i"'}

@@ -1,5 +1,7 @@
-FROM alpine:3.6 as vmod-builder
+#FROM quay.io/justcontainers/base-alpine-without-s6:v3.4.3
 
+####----------
+FROM alpine:3.6 as vmod-builder
 WORKDIR /build
 RUN apk update
 RUN apk add --quiet ca-certificates curl wget tar gzip jq
@@ -35,10 +37,28 @@ EXPOSE 80
 
 RUN  apk --no-cache add varnish bind-tools tini
 
+####----------
+## ROOTFSß
+##
+
+# root filesystem
+COPY rootfs /
+# s6 overlay
+RUN apk add --no-cache curl \
+ && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz \
+  | tar xvzf - -C /
+####
+
 COPY --from=vmod-builder /usr/lib/varnish/vmods/libvmod_querystring.so /usr/lib/varnish/vmods/libvmod_querystring.so
 COPY --from=gomplate /gomplate /usr/local/bin/gomplate
 COPY --from=prometheus-exporter-builder /prometheus_varnish_exporter /usr/local/bin/prometheus_varnish_exporter
 
 ADD *.sh /
-ENTRYPOINT ["/sbin/tini", "--"]
+
+##
+## INIT
+##
+
 CMD ["/start.sh"]
+
+ENTRYPOINT [ "/init" ]
