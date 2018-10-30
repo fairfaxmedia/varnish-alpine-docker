@@ -11,12 +11,12 @@ else
   exit 1
 fi
 
-if varnishadm vcl.list | awk ' { print $3 } ' | grep -q $new_config; then
+if varnishadm vcl.list | awk ' { print $NF } ' | grep -q $new_config; then
   echo Trying to use new config $new_config, but that is already in use
   exit 2
 fi
 
-current_config=$( varnishadm vcl.list | awk ' /^active/ { print $3 } ' )
+current_config=$( varnishadm vcl.list | awk ' /^active/ { print $NF } ' )
 
 if [[ ! -z $DEBUG ]]; then
   echo "Loading vcl from $VARNISH_CONFIG_FILE"
@@ -39,4 +39,3 @@ else
 fi
 [[ ! -z $DEBUG ]] && varnishadm vcl.list
 exit 0
-
