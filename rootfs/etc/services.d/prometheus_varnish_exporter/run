@@ -1,0 +1,2 @@
+#!/usr/bin/execlineb -P
+/usr/local/bin/prometheus_varnish_exporter -no-exit
