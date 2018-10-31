@@ -32,9 +32,16 @@ do_reload()
     new_config="reload_$(date +%FT%H:%M:%S)"
 
     if varnishadm vcl.load $new_config $VARNISH_CONFIG_FILE; then
-      [[ ! -z $DEBUG ]] && echo "varnishadm vcl.load succeded" > /tmp/ok
+      [[ ! -z $DEBUG ]] && echo "varnishadm vcl.load succeded"
     else
-      echo "varnishadm vcl.load failed" > /tmp/err
+      echo "varnishadm vcl.load failed"
+      exit 1
+    fi
+
+    if varnishadm vcl.use $new_config; then
+      [[ ! -z $DEBUG ]] && echo "varnishadm vcl.use succeded"
+    else
+      echo "varnishadm vcl.use failed"
       exit 1
     fi
 }
