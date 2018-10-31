@@ -1,2 +1,2 @@
-#!/usr/bin/execlineb -P
+#!/usr/bin/with-contenv sh
 exec /dnscheck.sh
