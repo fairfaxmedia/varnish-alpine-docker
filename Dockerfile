@@ -1,6 +1,3 @@
-#FROM quay.io/justcontainers/base-alpine-without-s6:v3.4.3
-
-####----------
 FROM alpine:3.6 as vmod-builder
 WORKDIR /build
 RUN apk update
@@ -34,20 +31,13 @@ ENV VARNISH_BACKEND_ADDRESS 192.168.1.65
 ENV VARNISH_MEMORY 100M
 ENV VARNISH_BACKEND_PORT 80
 EXPOSE 80
-
 RUN  apk --no-cache add varnish bind-tools tini
 
-####----------
-## ROOTFSß
-##
-
-# root filesystem
+# s6 overlay stuff
 COPY rootfs /
-# s6 overlay
 RUN apk add --no-cache curl \
- && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz \
+ && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v1.21.7.0/s6-overlay-amd64.tar.gz \
   | tar xvzf - -C /
-####
 
 COPY --from=vmod-builder /usr/lib/varnish/vmods/libvmod_querystring.so /usr/lib/varnish/vmods/libvmod_querystring.so
 COPY --from=gomplate /gomplate /usr/local/bin/gomplate
@@ -55,10 +45,5 @@ COPY --from=prometheus-exporter-builder /prometheus_varnish_exporter /usr/local/
 
 ADD *.sh /
 
-##
-## INIT
-##
-
 CMD ["/start.sh"]
-
 ENTRYPOINT [ "/init" ]
