@@ -45,5 +45,4 @@ COPY --from=prometheus-exporter-builder /prometheus_varnish_exporter /usr/local/
 
 ADD *.sh /
 
-CMD ["/start.sh"]
 ENTRYPOINT [ "/init" ]
