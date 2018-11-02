@@ -1,0 +1,2 @@
+#!/usr/bin/with-contenv sh
+mkdir -p /var/lib/varnish/`hostname` && chown nobody /var/lib/varnish/`hostname`
