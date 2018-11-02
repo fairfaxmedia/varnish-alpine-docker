@@ -1,2 +1,11 @@
 #!/usr/bin/with-contenv sh
 mkdir -p /var/lib/varnish/`hostname` && chown nobody /var/lib/varnish/`hostname`
+
+if [ -f "$VARNISH_GOMPLATE_FILE" -a -r "$VARNISH_GOMPLATE_FILE" ]; then
+  VARNISH_CONFIG_FILE='/etc/varnish/default.vcl'
+  echo "Creating ${VARNISH_CONFIG_FILE} from gomplate ${VARNISH_GOMPLATE_FILE}"
+  gomplate --file ${VARNISH_GOMPLATE_FILE} --out ${VARNISH_CONFIG_FILE}
+else
+  echo "Using only backend ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT}, no config file"
+  touch "/tmp/backend-only"
+fi
