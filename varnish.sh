@@ -3,17 +3,10 @@ SLEEP_TIME=15
 
 start_varnish()
 {
-  if [ -f "$VARNISH_GOMPLATE_FILE" -a -r "$VARNISH_GOMPLATE_FILE" ]; then
-    VARNISH_CONFIG_FILE='/etc/varnish/default.vcl'
-    echo "Creating ${VARNISH_CONFIG_FILE} from gomplate ${VARNISH_GOMPLATE_FILE}"
-    gomplate --file ${VARNISH_GOMPLATE_FILE} --out ${VARNISH_CONFIG_FILE}
-    varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY} || exit 1
-  elif [[ ! -z $VARNISH_CONFIG_FILE ]]; then
-    echo "Using supplied ${VARNISH_CONFIG_FILE}"
-    varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY} || exit 1
+  if [ -f "/tmp/backend-only" ]; then
+    varnishd -s malloc,${VARNISH_MEMORY} -a :80 -b ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT}
   else
-    echo "Using only backend ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT}, no config file"
-    varnishd -s malloc,${VARNISH_MEMORY} -a :80 -b ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT} || exit 1
+    varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY}
   fi
 }
 
