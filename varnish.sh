@@ -3,9 +3,12 @@ SLEEP_TIME=15
 
 start_varnish()
 {
+  timestp="stamp_$(date +%F_%H:%M:%S)"
   if [ -f "/tmp/backend-only" ]; then
+    echo "varnish.sh: [${timestp}] Using only backend ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT}, no config file"
     varnishd -s malloc,${VARNISH_MEMORY} -a :80 -b ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT}
   else
+    echo "varnish.sh: [${timestp}] Using supplied ${VARNISH_CONFIG_FILE}"
     varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY}
   fi
 }
