@@ -1,2 +1,2 @@
 #!/usr/bin/with-contenv sh
-/dnscheck.sh
+exec /dnscheck.sh

@@ -1,2 +1,2 @@
 #!/usr/bin/with-contenv sh
-/varnish.sh
+exec /varnish.sh

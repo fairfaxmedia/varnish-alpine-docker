@@ -1,2 +1,2 @@
 #!/usr/bin/with-contenv sh
-/usr/local/bin/prometheus_varnish_exporter -no-exit
+exec /usr/local/bin/prometheus_varnish_exporter -no-exit
