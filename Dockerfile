@@ -34,9 +34,10 @@ EXPOSE 80
 RUN  apk --no-cache add varnish bind-tools tini
 
 # s6 overlay stuff
+ENV S6_OVERLAY_VERSION=v1.21.7.0
 COPY rootfs /
 RUN apk add --no-cache curl \
- && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz \
+ && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
   | tar xvzf - -C /
 
 COPY --from=vmod-builder /usr/lib/varnish/vmods/libvmod_querystring.so /usr/lib/varnish/vmods/libvmod_querystring.so
