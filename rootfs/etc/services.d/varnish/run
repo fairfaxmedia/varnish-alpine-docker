@@ -1,8 +1,4 @@
 #!/usr/bin/with-contenv sh
-until (varnishtop -1 >/dev/null); do
-  echo "Waiting for varnish to start.."
-  sleep 5
-done
 
 if [ -f "$VARNISH_GOMPLATE_FILE" -a -r "$VARNISH_GOMPLATE_FILE" ]; then
   VARNISH_CONFIG_FILE='/etc/varnish/default.vcl'
