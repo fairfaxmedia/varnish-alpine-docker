@@ -27,6 +27,25 @@ get_backends()
   done
 }
 
+do_reload()
+{
+    new_config="reload_$(date +%FT%H:%M:%S)"
+
+    if varnishadm vcl.load $new_config $VARNISH_CONFIG_FILE; then
+      [[ ! -z $DEBUG ]] && echo "varnishadm vcl.load succeded"
+    else
+      echo "varnishadm vcl.load failed"
+      exit 1
+    fi
+
+    if varnishadm vcl.use $new_config; then
+      [[ ! -z $DEBUG ]] && echo "varnishadm vcl.use succeded"
+    else
+      echo "varnishadm vcl.use failed"
+      exit 1
+    fi
+}
+
 while true; do
 
   get_backends
@@ -51,7 +70,7 @@ while true; do
     fi
   done
   if [[ $reload_needed -ne 0 ]]; then
-    ./reload_varnish.sh
+    do_reload
   fi
 
 done

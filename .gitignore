@@ -3,3 +3,7 @@
 .cache/
 .idea/
 junit.xml
+.gitignore
+common.yaml
+ct-development-varnish.yaml
+
