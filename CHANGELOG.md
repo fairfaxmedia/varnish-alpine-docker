@@ -1,3 +1,8 @@
+### 5.2.0
+
+* Change base image to use s6 - this changes how the scripts are managed. More like managed services now. Thanks to @axozoid for doing this work!
+
+
 ### 5.1.1
 
 * Bugfix: `reload_varnish.sh` was using a wrong value to compare configs.
