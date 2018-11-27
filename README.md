@@ -16,6 +16,7 @@ Includes a metrics endpoint suitable for use with Promemetheus, using <https://g
 *   `VARNISH_BACKEND_ADDRESS` - host/ip of your backend.  Defaults to 192.168.1.65.
 *   `VARNISH_BACKEND_PORT` - TCP port of your backend.  Defaults to 80.
 *   `VARNISH_SKIP_METRICS` - Skip exposing a metrics endpoint.
+*   `VARNISH_NCSA_FORMAT` - Custom varnishncsa format. Defaults to `%h %l %u %t "%r" %s %b "%{Referer}i" "%{User-agent}i"`
 
 ## Quick start
 
