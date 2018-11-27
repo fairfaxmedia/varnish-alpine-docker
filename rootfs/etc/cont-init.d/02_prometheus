@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv sh
+: ${VARNISH_SKIP_METRICS:=false}
+if [[ $VARNISH_SKIP_METRICS == "true" ]]; then
+  # disabling prometheus metrics
+  touch "/etc/services.d/prometheus_varnish_exporter/down"
+fi
