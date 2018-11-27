@@ -7,7 +7,7 @@ done
 
 get_backends()
 {
-  BACKEND_LIST=$(varnishadm vcl.show $(varnishadm vcl.list | grep active | awk '{print $4}') | egrep '^[ \t]+\.host[ \t]*=' | cut -d '"' -f 2)
+  BACKEND_LIST=$(varnishadm vcl.show $(varnishadm vcl.list | grep active | awk '{print $4}') | egrep '^[ \t]+\.host[ \t]*=' | grep -v nodnscheck | cut -d '"' -f 2)
   > /tmp/backend.list
   for backend in ${BACKEND_LIST}; do
 
