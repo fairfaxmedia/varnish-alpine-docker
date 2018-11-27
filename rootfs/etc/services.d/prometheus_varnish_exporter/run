@@ -1,5 +1,2 @@
 #!/usr/bin/with-contenv sh
-: ${VARNISH_SKIP_METRICS:=false}
-if [[ $VARNISH_SKIP_METRICS != "true" ]]; then
-  exec /usr/local/bin/prometheus_varnish_exporter -no-exit
-fi
+exec /usr/local/bin/prometheus_varnish_exporter -no-exit
