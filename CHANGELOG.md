@@ -1,3 +1,13 @@
+### 5.3.0
+
+* Enhancement of the selection of backends being monitored by dnscheck:
+
+ * Better identification of backends
+ * Allow to disable dns check for some backends (adding nodnscheck in the line)
+ * Get unique backends
+
+Thanks to @jesusfcr for doing this work!
+
 ### 5.2.0
 
 * Change base image to use s6 - this changes how the scripts are managed. More like managed services now. Thanks to @axozoid for doing this work!
