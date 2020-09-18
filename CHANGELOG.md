@@ -1,3 +1,7 @@
+### 5.4.0
+
+* :wrench: Allow configuration of the `vsl_reclen` parameter for altering the default size of the SHM log.
+
 ### 5.3.0
 
 * Enhancement of the selection of backends being monitored by dnscheck:
