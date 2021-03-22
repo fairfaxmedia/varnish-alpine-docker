@@ -6,13 +6,13 @@ start_varnish()
     VARNISH_CONFIG_FILE='/etc/varnish/default.vcl'
     echo "Creating ${VARNISH_CONFIG_FILE} from gomplate ${VARNISH_GOMPLATE_FILE}"
     gomplate --file ${VARNISH_GOMPLATE_FILE} --out ${VARNISH_CONFIG_FILE}
-    varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY} -p vsl_reclen=${VARNISH_VSL_RECLEN} || exit 1
+    exec varnishd -F -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY} -p vsl_reclen=${VARNISH_VSL_RECLEN} || exit 1
   elif [[ ! -z $VARNISH_CONFIG_FILE ]]; then
     echo "Using supplied ${VARNISH_CONFIG_FILE}"
-    varnishd -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY} -p vsl_reclen=${VARNISH_VSL_RECLEN} || exit 1
+    exec varnishd -F -f ${VARNISH_CONFIG_FILE} -s malloc,${VARNISH_MEMORY} -p vsl_reclen=${VARNISH_VSL_RECLEN} || exit 1
   else
     echo "Using only backend ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT}, no config file"
-    varnishd -s malloc,${VARNISH_MEMORY} -a :80 -b ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT} -p vsl_reclen=${VARNISH_VSL_RECLEN} || exit 1
+    exec varnishd -F -s malloc,${VARNISH_MEMORY} -a :80 -b ${VARNISH_BACKEND_ADDRESS}:${VARNISH_BACKEND_PORT} -p vsl_reclen=${VARNISH_VSL_RECLEN} || exit 1
   fi
 }
 
