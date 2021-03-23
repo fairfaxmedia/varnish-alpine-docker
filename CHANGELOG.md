@@ -1,6 +1,11 @@
+### 5.5.0
+
+* 🐛 Varnish now runs in foreground mode, which means it doesn't need to check every second if it is running.
+* 🐛 dnscheck now correctly handles backends that have a port specified.
+
 ### 5.4.0
 
-* :wrench: Allow configuration of the `vsl_reclen` parameter for altering the default size of the SHM log.
+* 🔧 Allow configuration of the `vsl_reclen` parameter for altering the default size of the SHM log.
 
 ### 5.3.0
 
