@@ -1,4 +1,4 @@
-FROM alpine:3.6 as vmod-builder
+FROM alpine:3.15 as vmod-builder
 WORKDIR /build
 RUN apk update
 RUN apk add --quiet ca-certificates curl wget tar gzip jq
@@ -11,7 +11,7 @@ RUN ./configure --with-rst2man=: || cat config.log && \
     make check && \
     make install
 
-FROM alpine:3.6 as prometheus-exporter-builder
+FROM alpine:3.15 as prometheus-exporter-builder
 
 WORKDIR /build
 RUN apk update
@@ -24,7 +24,7 @@ RUN /prometheus_varnish_exporter -version
 
 FROM hairyhenderson/gomplate as gomplate
 
-FROM alpine:3.6
+FROM alpine:3.15
 MAINTAINER  Frode Egeland <egeland@gmail.com>
 ENV REFRESHED_AT 2017-11-02
 ENV VARNISH_BACKEND_ADDRESS 192.168.1.65
